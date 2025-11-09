@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import API_BASE_URL from "../config";
 
@@ -176,20 +175,31 @@ const Button = styled.button`
 
 // =================== COMPONENT ===================
 
-export default function NewQuotation() {
+export default function EditQuotation() {
+  const { id } = useParams();
   const navigate = useNavigate();
+  const [quotation, setQuotation] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const [quotation, setQuotation] = useState({
-    uniqueQuotationId: uuidv4(),
-    clientName: "",
-    email: "",
-    phone: "",
-    quotationDate: new Date().toISOString().split("T")[0],
-    items: [
-      { name: "", qty: 1, days: 1, unitPrice: 0, amount: 0, subItems: [""] },
-    ],
-  });
+  // ======== Fetch existing quotation ========
+  useEffect(() => {
+    const fetchQuotation = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/quotations/${id}`);
+        if (!res.ok) throw new Error("Failed to fetch quotation");
+        const data = await res.json();
+        setQuotation(data);
+      } catch (err) {
+        console.error("Error fetching quotation:", err);
+        alert("Could not load quotation.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchQuotation();
+  }, [id]);
 
+  // ======== Handlers ========
   const handleChange = (e) => {
     const { name, value } = e.target;
     setQuotation({ ...quotation, [name]: value });
@@ -241,7 +251,6 @@ export default function NewQuotation() {
     e.preventDefault();
 
     const payload = {
-      uniqueQuotationId: quotation.uniqueQuotationId,
       clientName: quotation.clientName,
       email: quotation.email,
       phone: quotation.phone,
@@ -257,35 +266,55 @@ export default function NewQuotation() {
     };
 
     try {
-      const res = await fetch(`${API_BASE_URL}/quotations`, {
-        method: "POST",
+      const res = await fetch(`${API_BASE_URL}/quotations/${id}`, {
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error("Failed to create quotation");
+      if (!res.ok) throw new Error("Failed to update quotation");
 
+      alert("Quotation updated successfully!");
       navigate("/");
     } catch (err) {
-      console.error("Error creating quotation:", err);
-      alert("Could not create quotation.");
+      console.error("Error updating quotation:", err);
+      alert("Could not update quotation.");
     }
   };
+
+  // ======== UI ========
+  if (loading) {
+    return (
+      <PageContainer>
+        <Card>
+          <Title>Loading Quotation...</Title>
+        </Card>
+      </PageContainer>
+    );
+  }
+
+  if (!quotation) {
+    return (
+      <PageContainer>
+        <Card>
+          <Title>Quotation Not Found</Title>
+        </Card>
+      </PageContainer>
+    );
+  }
 
   return (
     <PageContainer>
       <Card>
-        <Title>Create New Quotation</Title>
+        <Title>Edit Quotation</Title>
 
         <Form onSubmit={handleSubmit}>
-          {/* Client Info */}
           <FormRow>
             <div>
               <Label>Client Name</Label>
               <Input
                 type="text"
                 name="clientName"
-                placeholder="Enter client name"
                 value={quotation.clientName}
                 onChange={handleChange}
                 required
@@ -309,7 +338,6 @@ export default function NewQuotation() {
               <Input
                 type="email"
                 name="email"
-                placeholder="procurement@example.com"
                 value={quotation.email}
                 onChange={handleChange}
                 required
@@ -320,7 +348,6 @@ export default function NewQuotation() {
               <Input
                 type="text"
                 name="phone"
-                placeholder="+254700000001"
                 value={quotation.phone}
                 onChange={handleChange}
                 required
@@ -328,7 +355,6 @@ export default function NewQuotation() {
             </div>
           </FormRow>
 
-          {/* Items */}
           <ItemsContainer>
             <h3
               style={{
@@ -433,12 +459,12 @@ export default function NewQuotation() {
             <Button
               type="button"
               variant="secondary"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/quotations")}
             >
               Cancel
             </Button>
             <Button type="submit" variant="primary">
-              Save Quotation
+              Update Quotation
             </Button>
           </ActionRow>
         </Form>

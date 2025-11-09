@@ -6,6 +6,7 @@ import Quotations from "./pages/Quotations.jsx";
 import NewQuotation from "./pages/NewQuotation.jsx";
 import Invoices from "./pages/Invoices.jsx";
 import QuotationDetails from "./pages/QuotationDetails.jsx";
+import EditQuotation from "./pages/EditQuotation.jsx";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Quotations />} />
             <Route path="/quotation/new" element={<NewQuotation />} />
+            <Route path="/quotation/edit/:id" element={<EditQuotation />} />
             <Route path="/invoices" element={<Invoices />} />
             <Route path="/quotation/:id" element={<QuotationDetails />} />
           </Routes>

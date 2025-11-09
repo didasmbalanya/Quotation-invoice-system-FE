@@ -165,7 +165,11 @@ export default function QuotationDetails() {
           </Button>
           <Button
             variant="primary"
-            onClick={() => navigate(`/invoice/new/${id}`)}
+            onClick={() => {
+              fetch(`${API_BASE_URL}/invoices/${id}`, { method: "POST" })
+                  .then(() => navigate("/invoices"))
+                  .catch(() => alert("Failed to create invouce"));
+            }}
           >
             Generate Invoice
           </Button>
@@ -180,7 +184,7 @@ export default function QuotationDetails() {
             onClick={() => {
               if (window.confirm("Delete this quotation?")) {
                 fetch(`${API_BASE_URL}/quotations/${id}`, { method: "DELETE" })
-                  .then(() => navigate("/quotations"))
+                  .then(() => navigate("/"))
                   .catch(() => alert("Failed to delete"));
               }
             }}

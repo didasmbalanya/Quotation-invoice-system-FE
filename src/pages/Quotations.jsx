@@ -148,7 +148,7 @@ export default function QuotationList() {
         const res = await fetch(`${API_BASE_URL}/quotations`);
         if (!res.ok) throw new Error("Failed to fetch quotations");
         const data = await res.json();
-        setQuotations(data);
+       setQuotations(data);
       } catch (err) {
         console.error(err);
         setError("Unable to load quotations. Please try again later.");
@@ -209,7 +209,7 @@ export default function QuotationList() {
                   <Row key={q.id}>
                     <Td>{q.clientName}</Td>
                     <Td>
-                      {q.date ? new Date(q.date).toLocaleDateString() : "N/A"}
+                      {q.quotationDate ? new Date(q.quotationDate).toLocaleDateString() : "N/A"}
                     </Td>
                     <Td>
                       {q.totalAmount

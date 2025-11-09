@@ -87,7 +87,6 @@ export default function Invoices() {
     fetch(`${API_BASE}/invoices`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setInvoices(data);
         setLoading(false);
       })
