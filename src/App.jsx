@@ -16,6 +16,7 @@ export default function App() {
         <div className="container mx-auto p-4">
           <Routes>
             <Route path="/" element={<Quotations />} />
+            <Route path="/quotations" element={<Quotations />} />
             <Route path="/quotation/new" element={<NewQuotation />} />
             <Route path="/quotation/edit/:id" element={<EditQuotation />} />
             <Route path="/invoices" element={<Invoices />} />

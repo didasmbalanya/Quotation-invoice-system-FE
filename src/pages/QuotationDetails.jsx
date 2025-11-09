@@ -167,8 +167,8 @@ export default function QuotationDetails() {
             variant="primary"
             onClick={() => {
               fetch(`${API_BASE_URL}/invoices/${id}`, { method: "POST" })
-                  .then(() => navigate("/invoices"))
-                  .catch(() => alert("Failed to create invouce"));
+                .then(() => navigate("/invoices"))
+                .catch(() => alert("Failed to create invouce"));
             }}
           >
             Generate Invoice
@@ -181,11 +181,23 @@ export default function QuotationDetails() {
           </Button>
           <Button
             variant="danger"
-            onClick={() => {
+            onClick={async () => {
               if (window.confirm("Delete this quotation?")) {
-                fetch(`${API_BASE_URL}/quotations/${id}`, { method: "DELETE" })
-                  .then(() => navigate("/"))
-                  .catch(() => alert("Failed to delete"));
+                try {
+                  const res = await fetch(`${API_BASE_URL}/quotations/${id}`, {
+                    method: "DELETE",
+                  });
+                  const data = await res.json();
+
+                  if (!res.ok)
+                    throw new Error(data.error || "Failed to delete quotation");
+                } catch (err) {
+                  console.error(err);
+                  alert(
+                    err.message ||
+                      "Could not delete quotation. Please try again."
+                  );
+                }
               }
             }}
           >

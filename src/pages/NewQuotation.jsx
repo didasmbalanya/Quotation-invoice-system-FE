@@ -88,7 +88,7 @@ const ItemGrid = styled.div`
   gap: 1rem;
 
   @media (max-width: 600px) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 `;
 
@@ -285,7 +285,6 @@ export default function NewQuotation() {
               <Input
                 type="text"
                 name="clientName"
-                placeholder="Enter client name"
                 value={quotation.clientName}
                 onChange={handleChange}
                 required
@@ -309,7 +308,6 @@ export default function NewQuotation() {
               <Input
                 type="email"
                 name="email"
-                placeholder="procurement@example.com"
                 value={quotation.email}
                 onChange={handleChange}
                 required
@@ -320,7 +318,6 @@ export default function NewQuotation() {
               <Input
                 type="text"
                 name="phone"
-                placeholder="+254700000001"
                 value={quotation.phone}
                 onChange={handleChange}
                 required
@@ -344,48 +341,54 @@ export default function NewQuotation() {
             {quotation.items.map((item, i) => (
               <ItemBox key={i}>
                 <ItemGrid>
-                  <Input
-                    type="text"
-                    placeholder="Item name"
-                    value={item.name}
-                    onChange={(e) =>
-                      handleItemChange(i, "name", e.target.value)
-                    }
-                    required
-                  />
-                  <Input
-                    type="number"
-                    placeholder="Qty"
-                    value={item.qty}
-                    onChange={(e) =>
-                      handleItemChange(i, "qty", Number(e.target.value))
-                    }
-                    required
-                  />
-                  <Input
-                    type="number"
-                    placeholder="Days"
-                    value={item.days}
-                    onChange={(e) =>
-                      handleItemChange(i, "days", Number(e.target.value))
-                    }
-                    required
-                  />
-                  <Input
-                    type="number"
-                    placeholder="Unit Price"
-                    value={item.unitPrice}
-                    onChange={(e) =>
-                      handleItemChange(i, "unitPrice", Number(e.target.value))
-                    }
-                    required
-                  />
-                  <Input
-                    type="number"
-                    placeholder="Amount"
-                    value={item.amount}
-                    readOnly
-                  />
+                  <div>
+                    <Label>Item Name</Label>
+                    <Input
+                      type="text"
+                      value={item.name}
+                      onChange={(e) =>
+                        handleItemChange(i, "name", e.target.value)
+                      }
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label>Qty</Label>
+                    <Input
+                      type="number"
+                      value={item.qty}
+                      onChange={(e) =>
+                        handleItemChange(i, "qty", Number(e.target.value))
+                      }
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label>Days</Label>
+                    <Input
+                      type="number"
+                      value={item.days}
+                      onChange={(e) =>
+                        handleItemChange(i, "days", Number(e.target.value))
+                      }
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label>Unit Price</Label>
+                    <Input
+                      type="number"
+                      value={item.unitPrice}
+                      onChange={(e) =>
+                        handleItemChange(i, "unitPrice", Number(e.target.value))
+                      }
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label>Amount</Label>
+                    <Input type="number" value={item.amount} readOnly />
+                  </div>
                 </ItemGrid>
 
                 <SubItemsContainer>

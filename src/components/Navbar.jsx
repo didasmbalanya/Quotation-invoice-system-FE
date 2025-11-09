@@ -77,7 +77,9 @@ export const Navbar = () => {
   return (
     <NavContainer>
       <Logo>
+        <NavLink to="/">
         <h1>Quotations & Invoicing System</h1>
+        </NavLink>
       </Logo>
 
       <NavLinks>

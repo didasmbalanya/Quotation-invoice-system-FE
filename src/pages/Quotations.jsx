@@ -148,7 +148,7 @@ export default function QuotationList() {
         const res = await fetch(`${API_BASE_URL}/quotations`);
         if (!res.ok) throw new Error("Failed to fetch quotations");
         const data = await res.json();
-       setQuotations(data);
+        setQuotations(data);
       } catch (err) {
         console.error(err);
         setError("Unable to load quotations. Please try again later.");
@@ -167,11 +167,14 @@ export default function QuotationList() {
       const res = await fetch(`${API_BASE_URL}/quotations/${id}`, {
         method: "DELETE",
       });
-      if (!res.ok) throw new Error("Failed to delete quotation");
+      const data = await res.json();
+
+
+      if (!res.ok) throw new Error(data.error || "Failed to delete quotation");
       setQuotations((prev) => prev.filter((q) => q.id !== id));
     } catch (err) {
       console.error(err);
-      alert("Could not delete quotation. Please try again.");
+      alert(err.message || "Could not delete quotation. Please try again.");
     }
   };
 
@@ -209,7 +212,9 @@ export default function QuotationList() {
                   <Row key={q.id}>
                     <Td>{q.clientName}</Td>
                     <Td>
-                      {q.quotationDate ? new Date(q.quotationDate).toLocaleDateString() : "N/A"}
+                      {q.quotationDate
+                        ? new Date(q.quotationDate).toLocaleDateString()
+                        : "N/A"}
                     </Td>
                     <Td>
                       {q.totalAmount
